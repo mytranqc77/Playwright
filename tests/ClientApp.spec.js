@@ -12,11 +12,12 @@ test("Access Client App", async ({ page }) => {
   //   const titles = await page.locator(".card-body b").allTextContents();
   const products = page.locator(".card-body");
   const ExpectedProductName = "ZARA COAT 3";
-  const countProduct = products.count();
+  const countProduct = await products.count();
   for (let i = 0; i < countProduct; i++) {
   if ((await products.nth(i).locator("b").textContent()) === ExpectedProductName) 
     {
-      await products.nth(i).locator("text =  Add To Cart").click();
+      // await products.nth(i).locator("button:has-text('Add To Cart')").click();
+      await products.nth(i).getByRole('button', {name: 'Add To Cart'}).click()
       break;
     }
   }
@@ -24,5 +25,6 @@ test("Access Client App", async ({ page }) => {
   await page.waitForLoadState('networkidle')
   const bool = await page.locator("h3:has-text('ZARA COAT 3')").isVisible()
   expect(bool).toBeTruthy()
+  page.pause()
 
 });
